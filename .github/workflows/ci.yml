@@ -31,7 +31,7 @@ jobs:
           java-version: graalvm@19.2.1
 
       - name: Test
-        run: csbt +test
+        run: csbt +test scripted
 
   publish:
     needs: test
