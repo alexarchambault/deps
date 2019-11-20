@@ -17,10 +17,11 @@ inThisBuild(List(
 lazy val scala212 = "2.12.10"
 lazy val scala213 = "2.13.1"
 
-lazy val shared = Seq(
+lazy val shared = Def.settings(
   scalaVersion := scala212,
   crossScalaVersions := Seq(scala213, scala212),
-  scalacOptions += "-deprecation"
+  scalacOptions += "-deprecation",
+  sonatypeProfileName := "io.github.alexarchambault"
 )
 
 lazy val utest = Def.settings(
