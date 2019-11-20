@@ -43,18 +43,19 @@ lazy val core = project
     }
   )
 
-lazy val cli = project
-  .dependsOn(core)
-  .enablePlugins(PackPlugin)
-  .settings(
-    shared,
-    libraryDependencies ++= Seq(
-      "com.github.alexarchambault" %% "case-app" % "2.0.0-M9",
-      "io.get-coursier" %% "coursier" % "2.0.0-RC5-2",
-      "org.eclipse.jgit" % "org.eclipse.jgit" % "5.5.0.201909110433-r",
-      "org.slf4j" % "slf4j-nop" % "1.7.28"
-    )
-  )
+// Waiting for coursier#1439
+// lazy val cli = project
+//   .dependsOn(core)
+//   .enablePlugins(PackPlugin)
+//   .settings(
+//     shared,
+//     libraryDependencies ++= Seq(
+//       "com.github.alexarchambault" %% "case-app" % "2.0.0-M9",
+//       "io.get-coursier" %% "coursier" % "2.0.0-RC5-2",
+//       "org.eclipse.jgit" % "org.eclipse.jgit" % "5.5.0.201909110433-r",
+//       "org.slf4j" % "slf4j-nop" % "1.7.28"
+//     )
+//   )
 
 lazy val `deps-macros` = project
   .dependsOn(core)
