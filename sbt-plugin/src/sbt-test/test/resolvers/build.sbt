@@ -1,0 +1,1 @@
+libraryDependencies += Deps.`jvm-repr`

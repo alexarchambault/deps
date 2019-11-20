@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "com.github.jupyter:jvm-repr": "0.3.0"
+  },
+  "repositories": [
+    "jitpack"
+  ]
+}
