@@ -50,7 +50,7 @@ lazy val cli = project
     shared,
     libraryDependencies ++= Seq(
       "com.github.alexarchambault" %% "case-app" % "2.0.0-M9",
-      "io.get-coursier" %% "coursier" % "2.0.0-RC4+19-2373cde4-SNAPSHOT",
+      "io.get-coursier" %% "coursier" % "2.0.0-RC5-2",
       "org.eclipse.jgit" % "org.eclipse.jgit" % "5.5.0.201909110433-r",
       "org.slf4j" % "slf4j-nop" % "1.7.28"
     )
