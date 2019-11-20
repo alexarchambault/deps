@@ -1,0 +1,64 @@
+name: CI
+on:
+  push:
+    branches:
+    - master
+    tags:
+    - "v*"
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+
+      - uses: actions/checkout@v1
+
+      - name: coursier cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/coursier
+          key: ${{ runner.OS }}-coursier-cache-${{ hashFiles('**/*.sbt') }} # -${{ hashFiles('project/**.scala') }} (fails for now)
+          restore-keys: |
+            ${{ runner.OS }}-coursier-cache-${{ hashFiles('**/*.sbt') }}-
+            ${{ runner.OS }}-coursier-cache-
+
+      - uses: olafurpg/setup-scala@v5
+        with:
+          java-version: graalvm@19.2.1
+
+      - name: Test
+        run: csbt +test
+
+  publish:
+    needs: test
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v1
+
+      - name: coursier cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/coursier
+          key: ${{ runner.OS }}-coursier-cache-${{ hashFiles('**/*.sbt') }} # -${{ hashFiles('project/**.scala') }} (fails for now)
+          restore-keys: |
+            ${{ runner.OS }}-coursier-cache-${{ hashFiles('**/*.sbt') }}-
+            ${{ runner.OS }}-coursier-cache-
+
+      - uses: olafurpg/setup-scala@v5
+
+      - uses: olafurpg/setup-gpg@v2
+
+      - name: Release
+        run: csbt ci-release
+        env:
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
