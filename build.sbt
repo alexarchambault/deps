@@ -105,3 +105,4 @@ lazy val `sbt-plugin` = project
 
 skip.in(publish) := true
 shared
+crossScalaVersions := Nil
