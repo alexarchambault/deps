@@ -1,5 +1,5 @@
 /**
- * Provides values from `deps.json` ready to be consumed from sbt.
+ * Provides values from `dependencies.json` ready to be consumed from sbt.
  *
  * Dependencies, like
  * {{{

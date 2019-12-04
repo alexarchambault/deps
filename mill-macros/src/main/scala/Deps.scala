@@ -1,5 +1,5 @@
 /**
- * Provides values from `deps.json` ready to be consumed from mill.
+ * Provides values from `dependencies.json` ready to be consumed from mill.
  *
  * Dependencies, like
  * {{{
