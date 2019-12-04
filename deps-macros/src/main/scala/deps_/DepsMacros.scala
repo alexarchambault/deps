@@ -19,7 +19,13 @@ abstract class DepsMacros(val c: whitebox.Context) {
     def root(f: File): Option[File] =
       if (f == null) None
       else {
-        val deps = new File(f, "deps.json")
+        val deps = {
+          val short = new File(f, "deps.json")
+          val long = new File(f, "dependencies.json")
+          if (long.exists()) long
+          else if (short.exists()) short
+          else long
+        }
         if (deps.isFile)
           Some(f)
         else

@@ -16,7 +16,13 @@ object Update extends CaseApp[UpdateOptions] {
 
   private def updateInDirectory(dirOpt: Option[String], atomicOutputDirOpt: Option[String]): Unit = {
     val dir = Paths.get(dirOpt.getOrElse("."))
-    val depsFile = dir.resolve("deps.json")
+    val depsFile = {
+      val short = dir.resolve("deps.json")
+      val long = dir.resolve("dependencies.json")
+      if (Files.exists(long)) long
+      else if (Files.exists(short)) short
+      else long // report errors for this one
+    }
     if (!Files.exists(depsFile))
       sys.error(s"Not found: $depsFile")
     else if (!Files.isRegularFile(depsFile))

@@ -12,7 +12,13 @@ class Parser(root: Path) {
   private val cache = new ConcurrentHashMap[String, Dependencies]
 
   private def load(prefix: String): Dependencies = {
-    val path = root.resolve(s"${prefix}deps.json").toAbsolutePath
+    val path = {
+      val short = root.resolve(s"${prefix}deps.json").toAbsolutePath
+      val long = root.resolve(s"${prefix}dependencies.json").toAbsolutePath
+      if (Files.exists(long)) long
+      else if (Files.exists(short)) short
+      else long
+    }
     val b = Files.readAllBytes(path)
     val s = new String(b, StandardCharsets.UTF_8)
     Parser.parse(s)
