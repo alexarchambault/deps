@@ -82,7 +82,7 @@ object Updates {
         val multiVer = byBinVer.exists(_._2.lengthCompare(1) > 0)
         if (multiVer)
           ???
-        else {
+        else
           Versions(cache).withModule(mod"org.scala-lang:scala-library").versions().map { versions0 =>
             versions.zipWithIndex.flatMap {
               case (sv, idx) =>
@@ -95,7 +95,6 @@ object Updates {
                   .toSeq
             }
           }
-        }
       case ("sbt", Seq(ver)) =>
         Versions(cache).withModule(mod"org.scala-sbt:sbt").versions().map { versions =>
           val latest = versions.latest

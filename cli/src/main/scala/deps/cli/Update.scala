@@ -5,61 +5,14 @@ import java.nio.file.Files
 import java.nio.charset.StandardCharsets
 
 import caseapp._
-import coursier.cache.Cache
 
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import coursier.cache.FileCache
 import coursier.cache.loggers.RefreshLogger
-import org.eclipse.jgit.api.Git
-import org.eclipse.jgit.lib.ProgressMonitor
-
-import scala.collection.JavaConverters._
 
 object Update extends CaseApp[UpdateOptions] {
-
-  private final class SimpleProgressMonitor extends ProgressMonitor {
-    def start(totalTasks: Int): Unit =
-      () // System.err.println(s"Starting work on $totalTasks tasks")
-    def beginTask(title: String, totalWork: Int): Unit =
-      System.err.println(s"$title: $totalWork")
-    def update(completed: Int): Unit =
-      () // System.err.print(".")
-    def endTask(): Unit =
-      System.err.println("Done")
-    def isCancelled(): Boolean =
-      false
-  }
-
-  private def updateGitRepository(upstream: String, originOpt: Option[String]): Unit = {
-
-    val origin = originOpt.getOrElse(upstream)
-    val repo = Paths.get("repo")
-    if (Files.exists(repo))
-      sys.error(s"$repo already exists")
-    var cloneResult: Git = null
-    try {
-      cloneResult = Git.cloneRepository()
-        .setRemote("upstream")
-        .setURI(upstream)
-        .setDirectory(repo.toFile())
-        .setProgressMonitor(new SimpleProgressMonitor)
-        .call()
-
-      val branchList = cloneResult.branchList().call().asScala.toList
-      val baseBranch = branchList.head.getName()
-      val baseBranch0 =
-        if (baseBranch.startsWith("refs/heads/")) baseBranch.stripPrefix("refs/heads/")
-        else ???
-      System.err.println(s"branch: $baseBranch0")
-
-
-    } finally {
-      if (cloneResult != null)
-        cloneResult.close()
-    }
-  }
 
   private def updateInDirectory(dirOpt: Option[String], atomicOutputDirOpt: Option[String]): Unit = {
     val dir = Paths.get(dirOpt.getOrElse("."))
@@ -109,10 +62,5 @@ object Update extends CaseApp[UpdateOptions] {
   }
 
   def run(options: UpdateOptions, args: RemainingArgs): Unit =
-    options.upstream match {
-      case Some(upstream) =>
-        updateGitRepository(upstream, options.origin)
-      case None =>
-        updateInDirectory(options.shared.dir, options.atomic)
-    }
+    updateInDirectory(options.dir, options.atomic)
 }
